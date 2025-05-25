@@ -16,10 +16,10 @@
 ![JavaScript](https://img.shields.io/badge/lang-JavaScript-orange)
 ![Worker](https://img.shields.io/badge/Cloudflare-Worker-orange)
 
-[<img src="https://img.shields.io/github/v/release/Fourth-Master/35-Short-Link?color=00aaff"/>](https://github.com/Fourth-Master/35-Short-Link/releases/latest)
+[<img src="https://img.shields.io/github/v/release/Fourth-Master/Short-Link?color=00aaff"/>](https://github.com/Fourth-Master/Short-Link/releases/latest)
 ![Fourth Master](https://img.shields.io/badge/Author-Fourth%20Master-green)
 [<img src="https://img.shields.io/badge/Demo-883588.xyz-brightgreen"/>](https://883588.xyz)
-<!--![GitHub Repo stars](https://img.shields.io/github/stars/Fourth-Master/35-Short-Link)-->
+<!--![GitHub Repo stars](https://img.shields.io/github/stars/Fourth-Master/Short-Link)-->
 
 </div>
 
@@ -225,8 +225,8 @@ curl https://xxx.com/admin/api/shortlinks?page=1&pageSize=20&search=baidu
 ### 通过 GitHub 克隆与部署
 
 ```bash
-git clone https://github.com/你的仓库/35-shortlink-service.git
-cd 35-shortlink-service
+git clone https://github.com/Fourth-Master/Short-Link.git
+cd Short-Link
 npm install -g wrangler
 # 编辑 wrangler.toml，配置 Cloudflare 账号信息和 KV 命名空间
 wrangler dev # 本地开发预览
@@ -241,7 +241,7 @@ wrangler deploy # 部署到 Cloudflare
 
 1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/) 并进入 Workers & Pages。
 2. 点击“创建应用”或“创建 Worker”，选择“从 GitHub 导入存储库”。
-3. 关联你的 GitHub 账号，选择本项目仓库（如 `35-shortlink-service`）。
+3. 关联你的 GitHub 账号，选择本项目仓库（如 `Short-Link`）。
 4. 按提示完成导入，Cloudflare 会自动拉取代码并创建 Worker 服务。
 5. 在 Worker 设置中，绑定 KV 命名空间（需提前在 Cloudflare 控制台创建）。
 6. 配置环境变量（如 `ADMIN_USER`、`ADMIN_PASS`、`KV_NAMESPACE` 等）。
@@ -269,7 +269,7 @@ wrangler delete          # 删除 Worker 服务
 
 | 配置项           | 说明                                                         |
 |------------------|--------------------------------------------------------------|
-| name             | Worker 服务名称，建议唯一且与项目相关，如 "cf-shortlink-service" |
+| name             | Worker 服务名称，建议唯一且与项目相关，如 "cf-Short-Link" |
 | type             | Worker 类型，通常为 "javascript" 或 "webpack"                |
 | account_id       | Cloudflare 账户ID，需在 Cloudflare 控制台获取并填写           |
 | workers_dev      | 是否启用开发环境（true/false），开发调试建议为 true           |
