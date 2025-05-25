@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API文档 - 35短链接服务</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f7f8fa 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      transition: background 0.5s;
+    }
+    .doc-container {
+      max-width: 740px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(60, 120, 255, 0.10), 0 1.5px 8px #0001;
+      padding: 44px 28px 36px 28px;
+      animation: fadeIn 0.8s;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    header {
+      background: none;
+      color: #2563eb;
+      padding: 0 0 18px 0;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px #e0e7ff;
+    }
+    h2 {
+      color: #2563eb;
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      margin-top: 32px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    section {
+      margin-bottom: 32px;
+    }
+    code {
+      background: #f1f3f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 15px;
+    }
+    pre {
+      background: #f6f8fa;
+      border-radius: 8px;
+      padding: 18px 16px 16px 16px;
+      font-size: 15px;
+      overflow-x: auto;
+      position: relative;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 6px #e0e7ff;
+      border: 1px solid #e5e7eb;
+      line-height: 1.7;
+      transition: box-shadow 0.2s;
+    }
+    pre:hover {
+      box-shadow: 0 4px 16px #c7d2fe;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 18px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 3px 13px;
+      font-size: 13px;
+      cursor: pointer;
+      opacity: 0.85;
+      transition: background 0.2s, opacity 0.2s;
+      z-index: 2;
+    }
+    .copy-btn:hover {
+      background: #1d4ed8;
+      opacity: 1;
+    }
+    .copy-tip {
+      position: absolute;
+      top: 10px;
+      right: 80px;
+      background: #22c55e;
+      color: #fff;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 2;
+    }
+    .copy-tip.show {
+      opacity: 1;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      background: #f9fafb;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 6px #e0e7ff;
+    }
+    th, td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 15px;
+    }
+    th {
+      background: #f1f5fb;
+      color: #2563eb;
+      font-weight: 600;
+    }
+    .brand {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      font-size: 1.1rem;
+      color: #2563eb;
+      font-weight: 600;
+      letter-spacing: 1px;
+      opacity: 0.85;
+    }
+    @media (max-width: 700px) {
+      .doc-container {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+        padding: 18px 4vw 24px 4vw;
+      }
+      h1 { font-size: 1.4rem; }
+      h2 { font-size: 1.05rem; }
+      .brand { position: static; display: block; text-align: right; margin-bottom: 8px; }
+    }
+    .footer-bar {
+      padding: 24px 0 12px 0;
+      text-align: center;
+      background: linear-gradient(90deg,#f1f5fb 0%,#f7f8fa 100%);
+      color: #666;
+      font-size: 15px;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 -2px 8px #e0e7ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    .footer-links a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: auto;
+      transition: color 0.2s;
+      margin: 0 2px;
+    }
+    .footer-links a:hover {
+      color: #0ea5e9;
+    }
+    .footer-divider {
+      width: 80%;
+      max-width: 320px;
+      height: 1px;
+      background: linear-gradient(90deg, #e0e7ff 0%, #c7d2fe 100%);
+      margin: 4px 0 2px 0;
+      border-radius: 1px;
+      opacity: 0.7;
+    }
+    .footer-icon {
+      font-size: 1.1em;
+      margin-right: 2px;
+      vertical-align: middle;
+      opacity: 0.85;
+    }
+    .footer-copyright {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      color: #666;
+    }
+    .footer-copyright a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: auto;
+      margin-left: 2px;
+      transition: color 0.2s;
+    }
+    .footer-copyright a:hover {
+      color: #0ea5e9;
+    }
+    @media (max-width: 600px) {
+      .footer-bar {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 4vw 18px 4vw;
+        font-size: 13px;
+        gap: 6px;
+      }
+      .footer-divider {
+        width: 96%;
+        max-width: 98vw;
+      }
+      .footer-links, .footer-copyright {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="doc-container">
+    <span class="brand">35短链接服务</span>
+    <header><h1>35短链接服务 API文档</h1></header>
+    <main>
+      <section>
+        <h2>生成短链接 API</h2>
+        <p>用于将长链接转换为短链接，支持自定义短链。</p>
+        <table>
+          <tr><th>接口路径</th><td><code>/api/create</code></td></tr>
+          <tr><th>请求方法</th><td><code>POST</code></td></tr>
+        </table>
+        <h3>请求参数</h3>
+        <table>
+          <tr><th>参数名</th><th>类型</th><th>必填</th><th>说明</th></tr>
+          <tr><td>longUrl</td><td>string</td><td>是</td><td>需要生成短链的原始长链接</td></tr>
+          <tr><td>customCode</td><td>string</td><td>否</td><td>自定义短链（6-12位字母数字，不能重复、不能包含敏感词）</td></tr>
+          <tr><td>expireDays</td><td>number</td><td>否</td><td>有效期（天），默认30天，最大365天</td></tr>
+        </table>
+        <h3>请求示例</h3>
+        <pre>{
+  "longUrl": "https://www.example.com/abc",
+  "customCode": "mycode123",
+  "expireDays": 30
+}</pre>
+        <h3>返回示例</h3>
+        <pre>{
+  "status": 1,
+  "shortUrl": "https://35url.cn/mycode123",
+  "expire": 1718889600000,
+}</pre>
+        <p>status=1 表示成功，shortUrl为生成的短链，expire为到期时间戳（可选）。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="footer-bar">
+    <div class="footer-links">
+      <span class="footer-icon" aria-label="友情链接">🔗</span>友情链接：
+      <span id="friend-links"><a href="https://blog.soeg.cn" target="_blank" rel="noopener">四爷手扎</a></span>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-copyright">
+      <span class="footer-icon" aria-label="版权">Copyright ©️ </span>
+      <span id="copyright-info"> 2025 <a href="https://www.883588.xyz/" target="_blank">35短链</a>  By：四爷</span>
+    </div>
+  </footer>
+  <script>
+    function addCopyButtons() {
+      document.querySelectorAll('pre').forEach(function(pre) {
+        if (pre.querySelector('.copy-btn')) return;
+        var btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerText = '复制';
+        var tip = document.createElement('span');
+        tip.className = 'copy-tip';
+        tip.innerText = '复制成功!';
+        pre.appendChild(btn);
+        pre.appendChild(tip);
+        btn.addEventListener('click', function() {
+          var code = pre.innerText;
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(code).then(function() {
+              tip.classList.add('show');
+              setTimeout(function(){ tip.classList.remove('show'); }, 1200);
+            });
+          } else {
+            var textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              document.execCommand('copy');
+              tip.classList.add('show');
+              setTimeout(function(){ tip.classList.remove('show'); }, 1200);
+            } catch(e) {}
+            document.body.removeChild(textarea);
+          }
+        });
+      });
+    }
+    document.addEventListener('DOMContentLoaded', addCopyButtons);
+  </script>
+</body>
+</html>

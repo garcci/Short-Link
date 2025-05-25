@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>35短链接服务 - 短链生成</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f7f8fa 100%);
+      margin: 0;
+      padding: 0;
+      transition: background 0.5s;
+    }
+    .container {
+      max-width: 420px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(60, 120, 255, 0.10), 0 1.5px 8px #0001;
+      padding: 44px 28px 36px 28px;
+      animation: fadeIn 0.8s;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      text-align: center;
+      color: #2563eb;
+      margin-bottom: 28px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      font-size: 2.1rem;
+      text-shadow: 0 2px 8px #e0e7ff;
+    }
+    .input-group {
+      margin-right: 25px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #444;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 12px;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 8px;
+      font-size: 17px;
+      background: #f4f7ff;
+      transition: border 0.2s, box-shadow 0.2s;
+      outline: none;
+      box-shadow: 0 1px 4px #e0e7ff;
+    }
+    input[type="text"]:focus {
+      border: 1.5px solid #2563eb;
+      box-shadow: 0 0 0 2px #dbeafe;
+      background: #fff;
+    }
+    input[type="number"] {
+      padding: 12px 12px;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 8px;
+      font-size: 17px;
+      background: #f4f7ff;
+      transition: border 0.2s, box-shadow 0.2s;
+      outline: none;
+      box-shadow: 0 1px 4px #e0e7ff;
+    }
+    input[type="number"]:focus {
+      border: 1.5px solid #2563eb;
+      box-shadow: 0 0 0 2px #dbeafe;
+      background: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #2563eb 0%, #60a5fa 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 19px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px #dbeafe;
+      letter-spacing: 1px;
+    }
+    button:active {
+      background: linear-gradient(90deg, #1e40af 0%, #2563eb 100%);
+      transform: scale(0.98);
+    }
+    button:disabled {
+      background: #bcd0f7;
+      color: #fff;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .result, .error {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 17px;
+      box-shadow: 0 1px 6px #e0e7ff;
+      animation: fadeIn 0.5s;
+    }
+    .result {
+      background: linear-gradient(90deg, #e0f2fe 0%, #f0f9ff 100%);
+      color: #2563eb;
+      word-break: break-all;
+      border: 1px solid #bae6fd;
+    }
+    .result a {
+      color: #1d4ed8;
+      font-weight: 600;
+      text-decoration: underline dotted;
+      transition: color 0.2s;
+    }
+    .result a:hover {
+      color: #0ea5e9;
+    }
+    .error {
+      background: linear-gradient(90deg, #fff1f0 0%, #ffe4e6 100%);
+      color: #e11d48;
+      border: 1px solid #fecaca;
+    }
+    .brand {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      font-size: 1.1rem;
+      color: #2563eb;
+      font-weight: 600;
+      letter-spacing: 1px;
+      opacity: 0.85;
+    }
+    @media (max-width: 600px) {
+      .container {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+        padding: 18px 4vw 24px 4vw;
+      }
+      h1 { font-size: 1.4rem; }
+      .result, .error { font-size: 15px; }
+      .brand { position: static; display: block; text-align: right; margin-bottom: 8px; }
+    }
+    .footer-bar {
+      padding: 24px 0 12px 0;
+      text-align: center;
+      background: linear-gradient(90deg,#f1f5fb 0%,#f7f8fa 100%);
+      color: #666;
+      font-size: 15px;
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 -2px 8px #e0e7ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    .footer-links a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: auto;
+      transition: color 0.2s;
+      margin: 0 2px;
+    }
+    .footer-links a:hover {
+      color: #0ea5e9;
+    }
+    .footer-divider {
+      width: 80%;
+      max-width: 320px;
+      height: 1px;
+      background: linear-gradient(90deg, #e0e7ff 0%, #c7d2fe 100%);
+      margin: 4px 0 2px 0;
+      border-radius: 1px;
+      opacity: 0.7;
+    }
+    .footer-icon {
+      font-size: 1.1em;
+      margin-right: 2px;
+      vertical-align: middle;
+      opacity: 0.85;
+    }
+    .footer-copyright {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+      color: #666;
+    }
+    .footer-copyright a {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: auto;
+      margin-left: 2px;
+      transition: color 0.2s;
+    }
+    .footer-copyright a:hover {
+      color: #0ea5e9;
+    }
+    @media (max-width: 600px) {
+      .footer-bar {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 4vw 18px 4vw;
+        font-size: 13px;
+        gap: 6px;
+      }
+      .footer-divider {
+        width: 96%;
+        max-width: 98vw;
+      }
+      .footer-links, .footer-copyright {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>35短链接服务</h1>
+    <div style="text-align:center;margin-bottom:18px;color:#2563eb;font-size:1.08rem;">
+      一键生成安全短链，支持自定义，防微信/QQ拦截，永久免费！
+    </div>
+    <nav style="text-align:right;margin:12px 24px 0 0;"><a href="doc.html" style="color:#007bff;font-weight:bold;">API文档</a></nav>
+    <form id="shortenForm" style="display:flex;flex-direction:column;gap:18px;">
+      <div class="input-group">
+        <label for="longUrl">原始链接 <span style="color:#e53935;">*</span></label>
+        <input type="text" id="longUrl" name="longUrl" placeholder="请输入需要缩短的长链接" required style="font-size:1.08rem;">
+        <small style="color:#888;font-size:13px;">支持http/https开头的有效链接</small>
+      </div>
+      <div class="input-group">
+        <label for="customCode">自定义短链（可选，6-12位字母数字）：</label>
+        <input type="text" id="customCode" name="customCode" placeholder="如：mycode123" maxlength="12" autocomplete="off">
+        <small style="color:#888;font-size:13px;">如不填写则自动生成</small>
+      </div>
+      <div class="input-group">
+        <label for="expireDays">有效期（天）：</label>
+        <input type="number" id="expireDays" min="1" max="365" value="30" style="width:120px;"> <span style="font-size:13px;color:#888;">1-365天，留空为30天</span>
+      </div>
+      <button id="generateBtn" type="button" style="box-shadow:0 2px 8px #dbeafe;position:relative;overflow:hidden;">
+        <span id="btnText">生成短链接</span>
+        <span id="btnLoading" style="display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);"><svg width="22" height="22" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" stroke-dashoffset="0"><animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/></circle></svg></span>
+      </button>
+    </form>
+    <div id="result" class="result" style="display:none;"></div>
+    <div id="error" class="error" style="display:none;"></div>
+  </div>
+  <script>
+    const btn = document.getElementById('generateBtn');
+    const resultDiv = document.getElementById('result');
+    const errorDiv = document.getElementById('error');
+    btn.onclick = async function() {
+      resultDiv.style.display = 'none';
+      errorDiv.style.display = 'none';
+      const longUrl = document.getElementById('longUrl').value.trim();
+      const customCode = document.getElementById('customCode').value.trim();
+      const expireDaysInput = document.getElementById('expireDays');
+      let expireDays = parseInt(expireDaysInput.value, 10);
+      if (isNaN(expireDays)) expireDays = 30;
+      if (expireDays < 1) {
+        errorDiv.textContent = '有效期必须为1-365天';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      if (expireDays > 365) expireDays = 365;
+      if (!longUrl) {
+        errorDiv.textContent = '请输入需要缩短的长链接';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      if (customCode && !/^[a-zA-Z0-9]{6,12}$/.test(customCode)) {
+        errorDiv.textContent = '自定义短链需为6-12位字母或数字';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      btn.disabled = true;
+      document.getElementById('btnText').style.display = 'none';
+      document.getElementById('btnLoading').style.display = 'inline-block';
+      btn.style.opacity = '0.7';
+      try {
+        const res = await fetch('/api/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ longUrl, customCode, expireDays })
+        });
+        const data = await res.json();
+        if (data.status === 1) {
+          resultDiv.innerHTML = '<div style="font-weight:bold;font-size:18px;margin-bottom:6px;">创建成功！</div>' +
+            '<div style="text-align:center;gap:8px;">' +
+            '<a href="' + data.shortUrl + '" target="_blank" style="font-size:17px;color:#1d4ed8;font-weight:600;text-decoration:underline dotted;word-break:break-all;">' + data.shortUrl + '</a>' +
+            '<button id="copyBtn" style="margin-top: 10px;padding:4px 10px;font-size:14px;border-radius:6px;border:none;background:#2563eb;color:#fff;cursor:pointer;">复制</button>' +
+            '<div style="margin-top:8px;font-size:14px;color:#555;">有效期：' + (function(){
+              if(data.expire){
+                var now = Date.now();
+                var days = Math.ceil((data.expire-now)/86400000);
+                return days>=365 ? '365天' : (days>0 ? '剩余'+days+'天' : '已过期');
+              }else{
+                return '永久';
+              }
+            })() + '</div>' +
+            (data.expire ? '<div style="margin-top:4px;font-size:14px;color:#555;">到期时间：' + (function(ts){
+              if(!ts)return '';
+              var d = new Date(ts);
+              return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日'+d.getHours()+':' + (d.getMinutes()<10?'0':'')+d.getMinutes();
+            })(data.expire) + '</div>' : '') +
+            '</div>';
+          resultDiv.style.display = 'block';
+          document.getElementById('copyBtn').onclick = function() {
+            navigator.clipboard.writeText(data.shortUrl).then(function(){
+              document.getElementById('copyBtn').textContent = '已复制';
+              setTimeout(function(){ document.getElementById('copyBtn').textContent = '复制'; }, 1200);
+            });
+          };
+        } else {
+          errorDiv.textContent = data.msg || '生成失败，请重试';
+          errorDiv.style.display = 'block';
+        }
+      } catch (e) {
+        errorDiv.textContent = '网络异常，请稍后重试';
+        errorDiv.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        document.getElementById('btnText').style.display = 'inline';
+        document.getElementById('btnLoading').style.display = 'none';
+        btn.style.opacity = '1';
+      }
+    };
+  </script>
+  <footer class="footer-bar">
+    <div class="footer-links">
+      <span class="footer-icon" aria-label="友情链接">🔗</span>友情链接：
+      <span id="friend-links"><a href="https://blog.soeg.cn" target="_blank" rel="noopener">四爷手扎</a></span>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-copyright">
+      <span class="footer-icon" aria-label="版权">Copyright ©️ </span>
+      <span id="copyright-info"> 2025 <a href="https://www.883588.xyz/" target="_blank">35短链</a>  By：四爷</span>
+    </div>
+  </footer>
+</body>
+</html>

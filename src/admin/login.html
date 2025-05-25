@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理员登录 - 35短链接服务</title>
+  <style>
+    body {background:#f5f6fa;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}
+    .login-box {background:#fff;padding:32px 24px;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,0.08);width:100%;max-width:340px;}
+    .login-box h2 {margin-bottom:24px;text-align:center;}
+    .form-group {margin-right: 25px;margin-bottom:18px;}
+    .form-group label {display:block;margin-bottom:6px;color:#333;font-size:15px;}
+    .form-group input {width:100%;padding:8px 12px;border:1px solid #ddd;border-radius:4px;font-size:15px;}
+    .login-btn {width:100%;padding:10px 0;background:#1976d2;color:#fff;border:none;border-radius:4px;font-size:16px;cursor:pointer;transition:background 0.2s;}
+    .login-btn:hover {background:#1565c0;}
+    .error {color:#e53935;text-align:center;margin-bottom:10px;}
+    @media (max-width:480px) {.login-box{padding:18px 8px;}}
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>管理员登录</h2>
+    <div id="error" class="error" style="display:none;"></div>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">账号</label>
+        <input type="text" id="username" name="username" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+      <div class="form-group">
+        <div id="turnstile-widget" style="margin-bottom:12px;"></div>
+      </div>
+      <button type="submit" class="login-btn">登录</button>
+    </form>
+  </div>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  <script>
+    let turnstileToken = '';
+    window.onload = function() {
+      if (window.turnstile) {
+        turnstile.render('#turnstile-widget', {
+          sitekey: '0x4AAAAAABbuvp4STApF9dS3',
+          callback: function(token) { turnstileToken = token; }
+        });
+      } else {
+        window.addEventListener('turnstile-loaded', function() {
+          turnstile.render('#turnstile-widget', {
+            sitekey: '0x4AAAAAABbuvp4STApF9dS3',
+            callback: function(token) { turnstileToken = token; }
+          });
+        });
+      }
+    };
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorDiv = document.getElementById('error');
+      errorDiv.style.display = 'none';
+      errorDiv.textContent = '';
+      if (!turnstileToken) {
+        errorDiv.textContent = '请先完成人机验证';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      const resp = await fetch('/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, turnstileToken })
+      });
+      const data = await resp.json();
+      if (data.status === 1) {
+        errorDiv.textContent = data.msg || '登录成功';
+        errorDiv.style.display = 'block';
+        setTimeout(function() {
+          document.cookie = `user=${encodeURIComponent(username)}; Path=/admin; SameSite=Lax`;
+          document.cookie = `password=${encodeURIComponent(password)}; Path=/admin; SameSite=Lax`;
+          window.location.href = '/admin';
+        }, 3000);
+      } else {
+        errorDiv.textContent = data.msg || '登录失败';
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

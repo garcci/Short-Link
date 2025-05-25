@@ -1,0 +1,24 @@
+name = "shortlink"
+main = "src/index.js"
+account_id = "e20be59e77fc*******9e3eb213e7"
+workers_dev = true
+compatibility_date = "2024-06-01"
+
+kv_namespaces = [
+  { binding = "LINKS", id = "66121b*******b149b486ca16c9e9aec" }
+]
+
+[assets]
+directory = "dist"  # 静态文件目录
+binding = "ASSETS"    # 绑定名称，用于在代码中引用
+
+[vars]
+ADMIN_USER = "admin"
+ADMIN_PASS = "123456"
+
+[env.production]
+route = [
+  "https://883588.xyz/*",
+  "https://www.883588.xyz/*"
+]
+zone_id = "ff69c7dc34*******9e45cd5b22ebcf"
