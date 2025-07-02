@@ -1,12 +1,9 @@
 name = "shortlink"
 main = "src/index.js"
-account_id = "e20be59e77fc*******9e3eb213e7"
 workers_dev = true
 compatibility_date = "2024-06-01"
 
-kv_namespaces = [
-  { binding = "LINKS", id = "66121b*******b149b486ca16c9e9aec" }
-]
+
 
 [assets]
 directory = "dist"  # 静态文件目录
