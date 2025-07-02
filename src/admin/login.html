@@ -42,13 +42,13 @@
     window.onload = function() {
       if (window.turnstile) {
         turnstile.render('#turnstile-widget', {
-          sitekey: '0x4AAAAAABbuvp4STApF9dS3',
+          sitekey: '0x4AAAAAABjJ5MTBCeomqVHz',
           callback: function(token) { turnstileToken = token; }
         });
       } else {
         window.addEventListener('turnstile-loaded', function() {
           turnstile.render('#turnstile-widget', {
-            sitekey: '0x4AAAAAABbuvp4STApF9dS3',
+            sitekey: '0x4AAAAAABjJ5MTBCeomqVHz',
             callback: function(token) { turnstileToken = token; }
           });
         });
