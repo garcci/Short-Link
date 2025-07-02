@@ -197,7 +197,7 @@ async function handleRequest(request, env) {
       const verifyResp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `secret=0x4AAAAAABbuvrSYXG8pvnseX93hvW477iU&response=${encodeURIComponent(turnstileToken)}`
+        body: `secret=0x4AAAAAABjJ5IIUNGR02u2Acu4y7WDcI6c&response=${encodeURIComponent(turnstileToken)}`
       });
       const verifyData = await verifyResp.json();
       if (!verifyData.success) {
